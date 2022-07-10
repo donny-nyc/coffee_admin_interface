@@ -32,6 +32,11 @@ const router = createRouter({
       path: '/orders',
       name: 'orders',
       component: () => import('@/modules/orders/components/OrdersDashboard.vue')
+    },
+    {
+      path: '/permissions',
+      name: 'permissions',
+      component: () => import('@/modules/permissions/components/PermissionsDashboard.vue')
     }
   ]
 })

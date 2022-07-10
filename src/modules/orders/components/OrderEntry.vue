@@ -21,17 +21,19 @@
 </script>
 
 <template>
-  <tr>
-    <td><button @click="toggle_show()">Show</button></td>
-    <td>1</td>
-    <td>4,513.00</td>
-    <td><a href="#">John Doe</a></td>
-    <td>July 9, 2022</td>
-    <td>July 14, 2022</td>
-    <td>Shipped</td>
-    <td><a href="#">92748902712399573007962007</a></td>
-    <td>UPS</td>
-  </tr>
+  <table>
+    <tr>
+      <td><button @click="toggle_show()">Show</button></td>
+      <td>1</td>
+      <td>4,513.00</td>
+      <td><a href="#">John Doe</a></td>
+      <td>July 9, 2022</td>
+      <td>July 14, 2022</td>
+      <td>Shipped</td>
+      <td><a href="#">92748902712399573007962007</a></td>
+      <td>UPS</td>
+    </tr>
+  </table>
   <table v-bind:class="order_item_visibility">
     <tr>
       <th>ID</th>

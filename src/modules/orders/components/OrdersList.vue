@@ -40,6 +40,6 @@
       <th>Tracking Number</th>
       <th>Courier</th>
     </tr>
-    <OrderEntry v-for="order in this.orders" />
   </table>
+  <OrderEntry v-for="order in this.orders" />
 </template>

@@ -14,7 +14,8 @@
       <router-link to='/products'>Products</router-link>
       <router-link to='/customers'>Customers</router-link>
       <router-link to='/inventory'>Inventory</router-link>
-      <router-link to='/Orders'>Orders</router-link>
+      <router-link to='/orders'>Orders</router-link>
+      <router-link to='/permissions'>Permissions</router-link>
     </p>
   </div>
 </template>
