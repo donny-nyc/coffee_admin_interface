@@ -1,29 +1,57 @@
-import type Resource from './resource';
-
 export default abstract class BaseFetcher {
-  abstract get(): Resource;
+  private api_url: string;
+  private api_host: string;
+  private api_port: number;
+  private resource: string;
+  // abstract get(): Resource;
 
-  constructor(api_host: string, api_port: number, resource_type: string) {
-    this.api_host = api_host;
-    this.api_port = api_port;
-    this.resource_type = resource_type;
+  constructor(resource: string) {
+    this.resource = resource;
+
+    this.api_host = import.meta.env.VITE_ADMIN_GATEWAY_HOST;
+    this.api_port = import.meta.env.VITE_ADMIN_GATEWAY_PORT;
+
+    let url = '';
+    if(this.remote_gateway_configured()) {
+      url = `http://${this.api_host}:${this.api_port}/${this.resource}`;
+    }
+
+    this.api_url = url;
+  }
+
+  public remote_gateway_configured(): boolean {
+    let configured: boolean = true;
 
     if(!this.api_host) {
-      console.info(`[${this.resource_type}]: api_host undefined`);
+      console.info('api_host undefined');
+      configured = false;
     }
 
     if(!this.api_port) {
-      console.info(`[${this.resource_type}]: api_port undefined`);
+      console.info('api_port undefined');
+      configured = false;
     }
+
+    if(!this.resource) {
+      console.info('resource type undefined');
+      configured = false;
+    }
+
+    return configured;
   }
 
-  prepare_api_url(): string {
-    let url = undefined;
-
-    if(this.api_host && this.api_port) {
-      url = `http://${this.api_host}:${this.api_port}/${this.resource_type}`;
+  protected async fetch_api_resources(query = "" as string): Promise<any> { // [{string: any}] | undefined {
+    let target: string = this.api_url;
+    if(query) {
+      target = target + '?' + query;
     }
 
-    return url;
+    const response: Response = await fetch(target, {
+      'Content-type': 'application/json'
+    })
+    .then(response => response.json())
+    .catch((err: any) => console.error(err));
+
+    return response;
   }
 };

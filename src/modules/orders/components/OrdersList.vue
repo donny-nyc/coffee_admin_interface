@@ -16,11 +16,10 @@
     },
     methods: {
       async fetchOrders() {
-        this.orders = await fetcher.get();
+        this.orders = await fetcher.get_all_customer_orders();
       },
     },
-    mounted() {
-        console.log('fetch orders');
+    beforeMount() {
         this.fetchOrders();
     },
   });
@@ -41,5 +40,5 @@
       <th>Courier</th>
     </tr>
   </table>
-  <OrderEntry v-for="order in this.orders" />
+  <OrderEntry v-for="order in this.orders" :order="order" :key="order.id" />
 </template>
