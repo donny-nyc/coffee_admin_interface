@@ -3,7 +3,6 @@ export default abstract class BaseFetcher {
   private api_host: string;
   private api_port: number;
   private resource: string;
-  // abstract get(): Resource;
 
   constructor(resource: string) {
     this.resource = resource;
@@ -40,8 +39,13 @@ export default abstract class BaseFetcher {
     return configured;
   }
 
-  protected async fetch_api_resources(query = "" as string): Promise<any> { // [{string: any}] | undefined {
+  protected async fetch_api_resources(query = "" as string, id?: number): Promise<any> {
     let target: string = this.api_url;
+
+    if(id) {
+      target = '/' + id;
+    }
+
     if(query) {
       target = target + '?' + query;
     }

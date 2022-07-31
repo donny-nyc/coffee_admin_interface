@@ -1,11 +1,17 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import ProductsList from './ProductsList.vue';
+  import { productsClient } from '../clients';
 
   export default defineComponent({
     name: "ProductsDashboard",
     components: {
       ProductsList,
+    },
+    methods: {
+      async newProduct() {
+        await productsClient.create_mock_product();
+      },
     }
   });
 </script>
@@ -49,6 +55,8 @@
         images, video, audio, etc.?
       </li>
     </ul>
+
+    <button @click="newProduct()">New Product</button>
 
     <ul>
       <li>Products Data Model</li>

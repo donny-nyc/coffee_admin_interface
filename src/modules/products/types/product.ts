@@ -1,9 +1,16 @@
 import type Resource from '../../core/infra/resource';
 
+interface ProductFromJson {
+  id: string;
+  category_id: number;
+  name: string;
+  description: string;
+};
+
 class Product implements Resource {
   constructor(
     private name: string, 
-    private id: number, 
+    private id: string | number, 
     private category_id: number, 
     private description?: string) 
   {}
@@ -12,7 +19,7 @@ class Product implements Resource {
     return this.name;
   }
 
-  public getId(): number {
+  public getId(): string | number{
     return this.id;
   }
 
@@ -31,12 +38,7 @@ class Product implements Resource {
   public static fromJson(data: any[]): Product[] {
     let parsed = [] as Product[];
 
-    data.forEach((rec: {
-      id: number, 
-      category_id: number,
-      name: string,
-      description?: string
-    }) => {
+    data.forEach((rec: ProductFromJson) => {
       parsed.push(new Product(
         rec.name, 
         rec.id, 
