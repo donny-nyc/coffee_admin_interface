@@ -1,7 +1,7 @@
 interface Resource {
   getResourceType(): string;
   getName(): string;
-  getId(): string | number;
+  getId(): string | number | undefined;
 };
 
 export default Resource;

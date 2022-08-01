@@ -21,7 +21,12 @@ const router = createRouter({
     {
       path: '/products',
       name: 'products',
-      component: () => import('@/modules/products/components/ProductsDashboard.vue')
+      component: () => import('@/modules/products/components/ProductsDashboard.vue'),
+      children: [
+        {path: '', name: 'list', component: () => import('@/modules/products/components/ProductsList.vue')},
+        {path: 'new', component: () => import('@/modules/products/components/NewProduct.vue')},
+        {path: ':productId/edit', name: 'editProduct', component: () => import('@/modules/products/components/EditProduct.vue'), props: true}
+      ]
     },
     {
       path: '/inventory',

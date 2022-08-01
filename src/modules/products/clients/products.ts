@@ -38,11 +38,17 @@ class ProductsClient extends BaseFetcher {
     });
   }
 
-  public async fetch_product(id: number): Promise<Product> {
-    return this.fetch_api_resources(undefined, id)
-    .catch((err: any) => {
+  public async fetch_product(id: number): Promise<void | Product> {
+    const product: Product | void = await fetch('http://localhost:43210/available_products/' + id)
+    .then((raw: Response) => { 
+      return raw.json();
+    }).then((p: {id: string, category_id: number, name: string, description: string}) => {
+      return new Product(p.name, p.category_id, [], p.description, p.id);
+    }).catch((err: any) => {
       console.error(err);
     });
+
+    return product;
   }
 
   public get_categories(): Category[] {
@@ -94,6 +100,21 @@ class ProductsClient extends BaseFetcher {
     'A real nightmare',
     'Fine. It\'s fine.'
   ];
+
+  public async create_product(product: Product) {
+    const response = await fetch('http://localhost:43210/available_products/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          name: product.getName(),
+          categoryId: product.getCategoryId(),
+          description: product.getDescription(),
+          attributes: product.getAttributes()
+      })
+    });
+  }
 
   public async create_mock_product() {
     const mockName = this.names[Math.floor(Math.random() * this.names.length)];

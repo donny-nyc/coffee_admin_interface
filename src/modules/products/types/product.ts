@@ -1,26 +1,37 @@
 import type Resource from '../../core/infra/resource';
 
+type ProductAttribute = {
+  name: string,
+  value: string
+};
+
 interface ProductFromJson {
-  id: string;
+  id: string | number;
   category_id: number;
   name: string;
+  attributes: ProductAttribute[];
   description: string;
 };
 
 class Product implements Resource {
   constructor(
     private name: string, 
-    private id: string | number, 
     private category_id: number, 
-    private description?: string) 
+    private attributes  = [] as ProductAttribute[],
+    private description?: string, 
+    private id?: string | number) 
   {}
 
   public getName(): string {
     return this.name;
   }
 
-  public getId(): string | number{
+  public getId(): string | number | undefined {
     return this.id;
+  }
+
+  public getAttributes(): ProductAttribute[] {
+    return this.attributes;
   }
 
   public getCategoryId(): number {
@@ -41,9 +52,10 @@ class Product implements Resource {
     data.forEach((rec: ProductFromJson) => {
       parsed.push(new Product(
         rec.name, 
-        rec.id, 
         rec.category_id, 
-        rec.description)
+        rec.attributes,
+        rec.description,
+        rec.id)
       );
     });
 
