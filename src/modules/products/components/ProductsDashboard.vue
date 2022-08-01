@@ -1,5 +1,6 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
+  import { RouterView } from 'vue-router';
   import ProductsList from './ProductsList.vue';
   import { productsClient } from '../clients';
 
@@ -56,7 +57,8 @@
       </li>
     </ul>
 
-    <button @click="newProduct()">New Product</button>
+    <router-link to="/products">Products</router-link> 
+    <router-link to="/products/new">New Product</router-link> 
 
     <ul>
       <li>Products Data Model</li>
@@ -64,7 +66,8 @@
       <li>Name: string</li>
       <li>Description: string</li>
     </ul>
-    <ProductsList />
+    <router-view></router-view>
+    <!--<ProductsList />-->
   </div>
 </template>
 

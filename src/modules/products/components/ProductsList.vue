@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue';
 import type { Category, Product } from '../types';
 import { productsClient } from '../clients';
+import { RouterLink } from 'vue-router';
 
 export default defineComponent({
   name: 'ProductsList',
@@ -60,7 +61,7 @@ export default defineComponent({
       <li v-for="product in this.products" v-bind:key="product.id">
         <input type="checkbox" v-bind:name="product.name" v-bind:value="product.id" v-model="selectedProducts" @change="checkProduct($event)" />
         <label v-bind:for="product.name">
-          {{product.getId()}} - {{product.getName()}} - {{product.getDescription()}}
+          {{product.getId()}} - {{product.getName()}} - {{product.getDescription()}} - <router-link :to="{ name: 'editProduct', params:{'id': product.id}}">edit</router-link>
         </label>
       </li>
     </ul>
