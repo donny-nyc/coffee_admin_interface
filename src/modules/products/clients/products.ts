@@ -12,8 +12,8 @@ class ProductsClient extends BaseFetcher {
   private categories: Category[];
 
   private readonly defaultProducts: Product[] = [
-    new Product("One", 1, 1, "First"),
-    new Product("two", 2, 2, "second")
+    new Product("One", 1, [], "First", 1),
+    new Product("two", 2, [], "second", 2)
   ];
 
   private readonly defaultCategories: Category[] = [
@@ -42,8 +42,8 @@ class ProductsClient extends BaseFetcher {
     const product: Product | void = await fetch('http://localhost:43210/available_products/' + id)
     .then((raw: Response) => { 
       return raw.json();
-    }).then((p: {id: string, category_id: number, name: string, description: string}) => {
-      return new Product(p.name, p.category_id, [], p.description, p.id);
+    }).then((p: {id: string, categoryId: number, name: string, description: string, attributes: {name: string, value: any}[]}) => {
+      return new Product(p.name, p.categoryId, p.attributes, p.description, p.id);
     }).catch((err: any) => {
       console.error(err);
     });
@@ -104,6 +104,21 @@ class ProductsClient extends BaseFetcher {
   public async create_product(product: Product) {
     const response = await fetch('http://localhost:43210/available_products/', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          name: product.getName(),
+          categoryId: product.getCategoryId(),
+          description: product.getDescription(),
+          attributes: product.getAttributes()
+      })
+    });
+  }
+
+  public async update_product(product: Product) {
+    const response = await fetch(`http://localhost:43210/available_products/${product.getId()}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },

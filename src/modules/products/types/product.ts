@@ -2,7 +2,7 @@ import type Resource from '../../core/infra/resource';
 
 type ProductAttribute = {
   name: string,
-  value: string
+  value: any
 };
 
 interface ProductFromJson {
@@ -30,7 +30,7 @@ class Product implements Resource {
     return this.id;
   }
 
-  public getAttributes(): ProductAttribute[] {
+  public getAttributes(): {[key: string]: any} {
     return this.attributes;
   }
 

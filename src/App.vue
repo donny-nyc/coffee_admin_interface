@@ -15,6 +15,10 @@
 </template>
 
 <style>
+  body {
+    font-family: sans-serif;
+  }
+
   #flex-box {
     display: flex;
     flex-flow: row;

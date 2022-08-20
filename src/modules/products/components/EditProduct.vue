@@ -21,6 +21,11 @@
       async fetchProduct() {
         const product: Product = await productsClient.fetch_product(this.productId);
 
+        if(!product) {
+          console.error('Failed to fetch:', this.productId);
+          return;
+        }
+
         console.log(product);
 
         this.id = product.getId();
@@ -30,11 +35,24 @@
         this.attributes = product.getAttributes();
       },
       async updateProduct() {
-        await productsClient.create_product(new Product(this.name, this.category_id, this.attributes, this.description));
+        await productsClient.update_product(new Product(this.name, this.category_id, this.attributes, this.description, this.id));
         console.log(this.name, this.description, this.category_id, this.attributes); 
       },
       async addAttribute() {
         this.attributes.push({name: '', value: ''});
+      },
+      removeAttribute(idx: number) {
+        if(idx < 0) {
+          console.error('negative index not allowed:', idx);
+          return;
+        }
+
+        if(idx >= this.attributes.length) {
+          console.error('index out of bounds:', idx);
+          return;
+        }
+
+        this.attributes.splice(idx, 1);
       }
     },
     async created() {
@@ -73,9 +91,10 @@
 
       <input type="text" name="value" v-model='attribute.value' />
       <label for='value'>Value</label>
+      <button @click="removeAttribute(index)">Remove</button>
     </div>
 
-    <button @click="createProduct()">Submit</button>
+    <button @click="updateProduct()">Submit</button>
   </div>
 </template>
 

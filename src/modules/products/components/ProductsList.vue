@@ -21,6 +21,8 @@ export default defineComponent({
 
       this.products = productsClient.get_products();
       this.categories = productsClient.get_categories();
+
+      console.log(this.products);
     },
     async deleteProducts() {
       await productsClient.delete_products(this.selectedProducts);
@@ -40,6 +42,17 @@ export default defineComponent({
     },
     async checkProduct(_: any) {
       console.log(this.selectedProducts);
+    },
+    checkAllProduct(_: any) {
+      if (this.selectedProducts.length < this.products.length) {
+        this.products.forEach((product: Product) => {
+          this.selectedProducts.push(product.getId());
+        });
+      } else {
+        this.selectedProducts = [];
+      }
+
+      console.log('selectedProducts:', this.selectedProducts);
     }
   },
   async created() {
@@ -53,17 +66,67 @@ export default defineComponent({
     <h2>Product List</h2>
     <button @click="deleteProducts()">Delete Products</button>
     <button @click="deleteAllProducts()">Delete All</button>
+    <button @click="fetchProducts()">Fetch All</button>
     <div v-for="category in categories" v-bind:key="category.id">
       <input type="checkbox" v-bind:name="category.name" v-bind:value="category" v-model="selectedCategories" @change="check($event)" />
       <label v-bind:for="category.name">{{category.name}}</label>
     </div>
-    <ul>
-      <li v-for="product in this.products" v-bind:key="product.id">
-        <input type="checkbox" v-bind:name="product.name" v-bind:value="product.id" v-model="selectedProducts" @change="checkProduct($event)" />
-        <label v-bind:for="product.name">
-          {{product.getId()}} - {{product.getName()}} - {{product.getDescription()}} - <router-link :to="{ name: 'editProduct', params:{'id': product.id}}">edit</router-link>
-        </label>
-      </li>
-    </ul>
+    <table id='products_table'>
+      <tr id='products_table_header'>
+        <th>
+          <input type="checkbox" @change="checkAllProduct($event)" />
+        </th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th />
+      </tr>
+      <tr class="products_table_row" v-for="product in this.products" v-bind:key="product.id">
+        <td>
+          <input type="checkbox" v-bind:name="product.name" v-bind:value="product.id" v-model="selectedProducts" @change="checkProduct($event)" />
+        </td>
+        <td>
+          {{product.getId()}} 
+        </td>
+        <td> 
+          {{product.getName()}} 
+        </td>
+        <td> 
+          {{product.getDescription()}}
+        </td>
+        <td> 
+          <router-link :to="{ name: 'editProduct', params:{'productId': product.getId()}}">edit</router-link>
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
+
+<style @scoped>
+  #products_table {
+    width: 100%;
+  }
+
+  #products_table a {
+    color: black;
+    padding: 10px 20px 10px 20px;
+  }
+
+  #products_table a:link {
+    text-decoration: none;  
+  }
+
+  #products_table a:hover {
+    text-decoration: underline;  
+  }
+
+  .products_table_row {
+    background-color: #EEE;
+    text-align: center;
+    line-height: 3;
+  }
+
+  #products_table_header {
+    background-color: #DDD;
+  }
+</style>
