@@ -9,6 +9,7 @@
       return {
         name: '',
         description: '',
+        category_ids: [],
         category_id: 0,
         attributes: [] as { name: String, value: String}[]
       }
@@ -21,6 +22,10 @@
       async addAttribute() {
         this.attributes.push({name: '', value: ''});
       }
+    },
+    async created() {
+      await this.productsClient.fetch_categories();
+      console.log(this.category_ids);
     }
   });
 </script>

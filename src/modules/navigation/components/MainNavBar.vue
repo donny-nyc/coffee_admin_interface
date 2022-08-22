@@ -1,10 +1,4 @@
-<script lang="ts">
-  import { defineComponent } from 'vue';
-
-  export default defineComponent({
-    name: 'MainNavBar',
-  });
-</script>
+<script lang="ts"></script>
 
 <template>
   <div id='main-nav-bar'>
@@ -25,7 +19,8 @@
     width: 200px;
     height: 100vh;
     margin: 0;
-    background-color: #AAA;
+    background-color: #111;
+    color: #DDD;
   }
 
   p {
@@ -34,7 +29,16 @@
   }
 
   a {
+    color: #DDD;
+    line-height: 2;
+  }
+
+  a:link {
     width: 100%;
-    background-color: white;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 </style>

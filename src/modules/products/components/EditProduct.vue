@@ -13,20 +13,26 @@
         id: '',
         name: '',
         description: '',
+        categories: [],
         category_id: 0,
         attributes: [] as { name: String, value: String}[]
       }
     },
     methods: {
       async fetchProduct() {
-        const product: Product = await productsClient.fetch_product(this.productId);
+        await productsClient.fetch_product(this.productId);
 
-        if(!product) {
+        const products = productsClient.get_products();
+
+        if(productsClient.no_products()) {
           console.error('Failed to fetch:', this.productId);
           return;
         }
 
-        console.log(product);
+        console.log(products);
+
+        const product = products[0];
+        console.log('product:', product);
 
         this.id = product.getId();
         this.name = product.getName();
@@ -56,48 +62,60 @@
       }
     },
     async created() {
-      console.log(this.productId);
-
       await this.fetchProduct(); 
+
+      this.categories = await productsClient.get_categories();
+      console.log(this.categories);
+
+      console.log(this.productId);
     }
   });
 </script>
 
 <template>
-  <div>
+  <div id='edit_product_form'>
     <h1>Edit Product - {{ productId }}</h1>
 
-    <input type="text" name="name" v-model='name' />
-    <label for="name">Name</label>
+    <label for="name">Name</label><br />
+    <input type="text" name="name" v-model='name' /><br />
     <br />
 
-    <input type="text" name="description" v-model='description' />
-    <label for="description">Description</label>
+    <label for="description">Description</label><br />
+    <input type="text" name="description" v-model='description' /><br />
     <br />
 
-    <label for="category_id">Category</label>
+    <label for="category_id">Category</label><br />
     <select name="category_id" list="category_id" v-model='category_id'>
-      <option value="1">Clothing</option>
-      <option value="2">Electronics</option>
-      <option value="3">Food and Beverage</option>
+      <option v-for="category in this.categories" v-bind:value="category.id" v-bind:key="category.id">
+        {{category.name}}
+      </option>
     </select>
     <br />
 
     <h2>Attributes</h2>
-    <button @click="addAttribute()">Add Attribute</button>
     <div v-for='(attribute, index) in attributes' v-bind:key='index'>
-      <input type="text" name='name' v-model='attribute.name' />
       <label for='name'>Name</label>
+      <input type="text" name='name' v-model='attribute.name' />
 
-      <input type="text" name="value" v-model='attribute.value' />
       <label for='value'>Value</label>
+      <input type="text" name="value" v-model='attribute.value' />
       <button @click="removeAttribute(index)">Remove</button>
     </div>
 
+    <button @click="addAttribute()">Add Attribute</button>
     <button @click="updateProduct()">Submit</button>
   </div>
 </template>
 
 <style>
+  #edit_product_form {
+    background-color: #333;
+    color: #eee;
+  }
 
+  #edit_product_form input, select {
+    background-color: #333;
+    color: #eee;
+    border-width: 0 0 2px 0;
+  }
 </style>

@@ -105,10 +105,11 @@ export default defineComponent({
 <style @scoped>
   #products_table {
     width: 100%;
+    color: #DDD;
+    line-height: 3;
   }
 
   #products_table a {
-    color: black;
     padding: 10px 20px 10px 20px;
   }
 
@@ -121,12 +122,11 @@ export default defineComponent({
   }
 
   .products_table_row {
-    background-color: #EEE;
+    background-color: #555;
     text-align: center;
-    line-height: 3;
   }
 
   #products_table_header {
-    background-color: #DDD;
+    background-color: #111;
   }
 </style>

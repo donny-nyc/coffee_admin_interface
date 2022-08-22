@@ -7,7 +7,7 @@ type ProductAttribute = {
 
 interface ProductFromJson {
   id: string | number;
-  category_id: number;
+  categoryId: string;
   name: string;
   attributes: ProductAttribute[];
   description: string;
@@ -16,7 +16,7 @@ interface ProductFromJson {
 class Product implements Resource {
   constructor(
     private name: string, 
-    private category_id: number, 
+    private categoryId: string, 
     private attributes  = [] as ProductAttribute[],
     private description?: string, 
     private id?: string | number) 
@@ -34,8 +34,8 @@ class Product implements Resource {
     return this.attributes;
   }
 
-  public getCategoryId(): number {
-    return this.category_id;
+  public getCategoryId(): string {
+    return this.categoryId;
   }
 
   public getDescription(): string {
@@ -46,13 +46,18 @@ class Product implements Resource {
     return 'product';
   }
 
-  public static fromJson(data: any[]): Product[] {
+  public static fromJson(records: ProductFromJson[]): Product[] {
+    if(!records) {
+      console.warn('cannot parse empty product data');
+      return [];
+    }
+
     let parsed = [] as Product[];
 
-    data.forEach((rec: ProductFromJson) => {
+    records.forEach((rec: ProductFromJson) => {
       parsed.push(new Product(
         rec.name, 
-        rec.category_id, 
+        rec.categoryId, 
         rec.attributes,
         rec.description,
         rec.id)
